@@ -2,8 +2,6 @@
 	'use strict';
 
 	module.exports = {
-		init: init
+		MongoDBUtil: require('./mongodb.util')
 	};
-
-	function init() {}
 })();
