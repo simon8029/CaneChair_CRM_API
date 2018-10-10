@@ -1,6 +1,6 @@
 ## The Demo of the API Layer of the CaneChair CRM System
 
-A JavaScript RESTful service solution with TDD (Test-Driven Development) approch.
+A JavaScript RESTful service layer solution with TDD (Test-Driven Development) approch.
 
 ---
 
