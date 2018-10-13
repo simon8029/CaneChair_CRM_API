@@ -26,7 +26,7 @@ describe('CustomerModule', () => {
 		});
 
 		it('should confirm CustomerModel function exist', () => {
-			expect(CustomerModule().CustomerModel).to.be.a('object');
+			expect(CustomerModule().CustomerModel).to.be.a('function');
 		});
 	});
 });
