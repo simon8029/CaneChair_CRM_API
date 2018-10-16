@@ -4,6 +4,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var MongoDBUtil = require('./modules/mongodb/mongodb.module').MongoDBUtil;
+var CustomerController = require('./modules/customer/customer.module')()
+	.CustomerController;
 
 var app = express();
 
@@ -14,6 +16,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 MongoDBUtil.init();
+
+app.use('/customers', CustomerController);
 
 app.get('/', function(req, res) {
 	var pkg = require(path.join(__dirname, 'package.json'));
