@@ -16,7 +16,6 @@ app.use(cookieParser());
 MongoDBUtil.init();
 
 app.get('/', function(req, res) {
-	console.log(`__dirname:`, __dirname);
 	var pkg = require(path.join(__dirname, 'package.json'));
 	res.json({
 		name: pkg.name,
