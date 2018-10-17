@@ -59,4 +59,8 @@ describe('CustomerService', () => {
 			});
 		});
 	});
+
+	describe('Get Customers', () => {
+		var expectedCustomers, expectedError;
+	});
 });
