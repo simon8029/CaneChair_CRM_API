@@ -1,4 +1,4 @@
-## The Demo of the API Layer of the CaneChair CRM System
+## The Demo of the API Layer of the CaneChair CRM System (DEMO)
 
 A JavaScript RESTful service layer solution with TDD (Test-Driven Development) approch.
 
