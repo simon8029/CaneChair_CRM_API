@@ -3,7 +3,8 @@
 
 	module.exports = {
 		addCustomer: addCustomer,
-		getAllCustomers: getAllCustomers
+		getAllCustomers: getAllCustomers,
+		getCustomerById: getCustomerById
 	};
 
 	var CustomerService = require('./customer.module')().CustomerService;
@@ -25,6 +26,21 @@
 
 	function getAllCustomers(req, res, next) {
 		CustomerService.getAllCustomers()
+			.then(success)
+			.catch(failure);
+
+		function success(data) {
+			req.response = data;
+			next();
+		}
+
+		function failure(err) {
+			next(err);
+		}
+	}
+
+	function getCustomerById(req, res, next) {
+		CustomerService.getCustomerById(req.params.customerId)
 			.then(success)
 			.catch(failure);
 

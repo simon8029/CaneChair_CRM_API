@@ -88,4 +88,35 @@ describe('CustomerService', () => {
 			});
 		});
 	});
+
+	describe('Get Customer By Id', () => {
+		var expectedCustomer, customerId, expectedError;
+		it('should successfully get the customer by id', () => {
+			expectedCustomer = CustomerFixture.createdCustomer;
+			customerId = expectedCustomer._id;
+
+			CustomerModelMock.expects('findById')
+				.withArgs(customerId)
+				.chain('exec')
+				.resolves(expectedCustomer);
+
+			CustomerService.getCustomerById(customerId).then(data => {
+				expect(data).to.deep.equal(expectedCustomer);
+			});
+		});
+
+		it('should throw error while getting customer by id', () => {
+			customerId = CustomerFixture.createdCustomer._id;
+			expectedError = ErrorFixture.unknownError;
+
+			CustomerModelMock.expects('findById')
+				.withArgs(customerId)
+				.chain('exec')
+				.rejects(expectedError);
+		});
+
+		CustomerService.getCustomerById(customerId).catch(error => {
+			expect(error).to.deep.equal(expectedError);
+		});
+	});
 });

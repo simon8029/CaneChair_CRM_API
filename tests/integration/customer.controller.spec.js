@@ -14,7 +14,7 @@ var CustomerFixture = Fixtures.CustomerFixture;
 
 var baseUri = '/customers';
 
-describe('Customer Controller', () => {
+describe.skip('Integration Test: Customer Controller', () => {
 	before(() => {
 		app = require('../../app');
 	});
@@ -36,7 +36,7 @@ describe('Customer Controller', () => {
 		});
 	});
 
-	describe('GET' + baseUri, () => {
+	describe.skip('GET ' + baseUri, () => {
 		it('should get all customers', done => {
 			request(app)
 				.get(baseUri)

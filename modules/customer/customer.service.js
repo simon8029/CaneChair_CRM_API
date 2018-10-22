@@ -3,7 +3,8 @@
 
 	module.exports = {
 		createCustomer: createCustomer,
-		getAllCustomers: getAllCustomers
+		getAllCustomers: getAllCustomers,
+		getCustomerById: getCustomerById
 	};
 
 	var CustomerModel = require('./customer.module')().CustomerModel;
@@ -14,5 +15,9 @@
 
 	function getAllCustomers() {
 		return CustomerModel.find({}).exec();
+	}
+
+	function getCustomerById(customerId) {
+		return CustomerModel.findById(customerId).exec();
 	}
 })();

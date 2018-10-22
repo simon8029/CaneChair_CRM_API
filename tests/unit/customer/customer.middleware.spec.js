@@ -23,7 +23,7 @@ describe('Customer Middleware', () => {
 		next = sinon.spy();
 	});
 
-	describe('add customer', () => {
+	describe('Add Customer', () => {
 		var createCustomer,
 			createCustomerPromise,
 			expectedCreatedCustomer,
@@ -70,7 +70,7 @@ describe('Customer Middleware', () => {
 		});
 	});
 
-	describe('Get all customers', () => {
+	describe('Get All Customers', () => {
 		var getAllCustomers,
 			getAllCustomersPromise,
 			expectedCustomers,
@@ -109,6 +109,59 @@ describe('Customer Middleware', () => {
 			sinon.assert.callCount(getAllCustomers, 1);
 
 			getAllCustomersPromise.catch(error => {
+				expect(error).to.be.a('object');
+				expect(error).to.deep.equal(expectedError);
+			});
+		});
+	});
+
+	describe('Get Customer By ID', () => {
+		var getCustomerById,
+			getCustomerByIdPromise,
+			expectedCustomer,
+			expectedError;
+
+		beforeEach(() => {
+			getCustomerById = sinon.stub(CustomerService, 'getCustomerById');
+		});
+
+		afterEach(() => {
+			getCustomerById.restore();
+		});
+
+		it('should successfully get the customer by id', () => {
+			expectedCustomer = CustomerFixture.createdCustomer;
+			getCustomerByIdPromise = Promise.resolve(expectedCustomer);
+
+			getCustomerById
+				.withArgs(req.params.CustomerId)
+				.returns(getCustomerByIdPromise);
+
+			CustomerMiddleware.getCustomerById(req, res, next);
+
+			sinon.assert.callCount(getCustomerById, 1);
+
+			getCustomerByIdPromise.then(() => {
+				expect(req.response).to.be.a('object');
+				expect(req.response).to.deep.equal(expectedCustomer);
+
+				sinon.assert.callCount(next, 1);
+			});
+		});
+
+		it('should throw error while getting customer by id', () => {
+			expectedError = ErrorFixture.unknownError;
+			getCustomerByIdPromise = Promise.reject(expectedError);
+
+			getCustomerById
+				.withArgs(req.params.customerId)
+				.returns(getCustomerByIdPromise);
+
+			CustomerMiddleware.getCustomerById(req, res, next);
+
+			sinon.assert.callCount(getCustomerById, 1);
+
+			getCustomerByIdPromise.catch(error => {
 				expect(error).to.be.a('object');
 				expect(error).to.deep.equal(expectedError);
 			});
