@@ -3,6 +3,7 @@
 var chai = require('chai');
 var expect = chai.expect;
 var sinon = require('sinon');
+require('sinon-mongoose');
 var mongoose = require('mongoose');
 
 var CustomerModule = require('../../../modules/customer/customer.module');
@@ -28,7 +29,7 @@ describe('CustomerService', () => {
 		return mongoose.connection.close();
 	});
 
-	describe('createCustomer', () => {
+	describe('Create Customer', () => {
 		var newCustomer, expectedCreatedCustomer, expectedError;
 
 		it('should successfully create new customer', () => {
@@ -55,6 +56,34 @@ describe('CustomerService', () => {
 
 			CustomerService.createCustomer(newCustomer).catch(error => {
 				CustomerModelMock.verify();
+				expect(error).to.deep.equal(expectedError);
+			});
+		});
+	});
+
+	describe('Get Customers', () => {
+		var expectedCustomers, expectedError;
+		it('should successful get all customers', () => {
+			expectedCustomers = CustomerFixture.customers;
+			CustomerModelMock.expects('find')
+				.withArgs({})
+				.chain('exec')
+				.resolves(expectedCustomers);
+
+			CustomerService.getAllCustomers().then(function(data) {
+				// CustomerModelMock.verify();
+				expect(data).to.deep.equal(expectedCustomers);
+			});
+		});
+		it('should throw error while getting all customers', () => {
+			expectedError = ErrorFixture.unknownError;
+			CustomerModelMock.expects('find')
+				.withArgs({})
+				.chain('exec')
+				.rejects(expectedError);
+
+			CustomerService.getAllCustomers().catch(function(error) {
+				// CustomerModelMock.verify();
 				expect(error).to.deep.equal(expectedError);
 			});
 		});

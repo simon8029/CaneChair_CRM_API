@@ -2,7 +2,8 @@
 	'use strict';
 
 	module.exports = {
-		addCustomer: addCustomer
+		addCustomer: addCustomer,
+		getAllCustomers: getAllCustomers
 	};
 
 	var CustomerService = require('./customer.module')().CustomerService;
@@ -19,6 +20,21 @@
 
 		function failure(error) {
 			next(error);
+		}
+	}
+
+	function getAllCustomers(req, res, next) {
+		CustomerService.getAllCustomers()
+			.then(success)
+			.catch(failure);
+
+		function success(data) {
+			req.response = data;
+			next();
+		}
+
+		function failure(err) {
+			next(err);
 		}
 	}
 })();
