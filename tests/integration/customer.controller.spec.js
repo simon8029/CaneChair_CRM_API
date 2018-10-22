@@ -14,7 +14,11 @@ var CustomerFixture = Fixtures.CustomerFixture;
 
 var baseUri = '/customers';
 
-describe.skip('Integration Test: Customer Controller', () => {
+var testData = {
+	existingCustomer: {}
+};
+
+describe('Integration Test: Customer Controller', () => {
 	before(() => {
 		app = require('../../app');
 	});
@@ -36,7 +40,7 @@ describe.skip('Integration Test: Customer Controller', () => {
 		});
 	});
 
-	describe.skip('GET ' + baseUri, () => {
+	describe('GET ' + baseUri, () => {
 		it('should get all customers', done => {
 			request(app)
 				.get(baseUri)
@@ -45,6 +49,29 @@ describe.skip('Integration Test: Customer Controller', () => {
 					expect(res.body).to.not.equal(undefined);
 					expect(res.body).to.be.a('array');
 					expect(res.body.length).to.not.equal(0);
+
+					testData.existingCustomer = res.body[0];
+					console.log(`res.body:`, res.body);
+					done();
+				});
+		});
+	});
+
+	describe('GET ' + baseUri + '/:customerId', () => {
+		it('should get a customer by id', done => {
+			console.log(
+				`testData.existingCustomer._id:`,
+				testData.existingCustomer._id
+			);
+			request(app)
+				.get(`${baseUri}/${testData.existingCustomer._id}`)
+				.end((err, res) => {
+					expect(res.status).to.equal(200);
+					expect(res.body).to.not.equal(undefined);
+					expect(res.body).to.deep.equal(testData.existingCustomer);
+					expect(res.body.firstName).to.equal(
+						testData.existingCustomer.firstName
+					);
 
 					done();
 				});
