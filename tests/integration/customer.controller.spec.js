@@ -7,7 +7,15 @@ chai.use(chaiHttp);
 var expect = chai.expect;
 var request = chai.request;
 
-var app;
+var Mongoose = require('mongoose').Mongoose;
+var Mockgoose = require('mockgoose-fix').Mockgoose;
+var mongoose = new Mongoose();
+var mockgoose = new Mockgoose(mongoose);
+mongoose.Promise = global.Promise;
+mockgoose.helper.setDbVersion('3.4.3');
+var mockMongoDBURL = 'mongodb://localhost:32768/mockCustomerDB';
+
+var app = require('../../app');
 
 var Fixtures = require('../fixture/fixtures');
 var CustomerFixture = Fixtures.CustomerFixture;
@@ -15,15 +23,28 @@ var CustomerFixture = Fixtures.CustomerFixture;
 var baseUri = '/customers';
 
 var testData = {
-	existingCustomer: {}
+	existingCustomer: {},
+	updatedCustomer: CustomerFixture.updatedCustomer
 };
 
-describe('Integration Test: Customer Controller', () => {
-	before(() => {
-		app = require('../../app');
-	});
+// before(function(done) {
+// 	mockgoose.prepareStorage().then(function() {
+// 		mongoose.connect(
+// 			mockMongoDBURL,
+// 			{},
+// 			function(err) {
+// 				done(err);
+// 			}
+// 		);
+// 	});
+// });
 
-	describe.skip('POST ' + baseUri, () => {
+describe('Integration Test: Customer Controller', () => {
+	// before(() => {
+	// 	// app = require('../../app');
+	// });
+
+	describe('POST ' + baseUri, () => {
 		it('should add new customer', done => {
 			request(app)
 				.post(baseUri)
@@ -51,7 +72,6 @@ describe('Integration Test: Customer Controller', () => {
 					expect(res.body.length).to.not.equal(0);
 
 					testData.existingCustomer = res.body[0];
-					console.log(`res.body:`, res.body);
 					done();
 				});
 		});
@@ -59,10 +79,6 @@ describe('Integration Test: Customer Controller', () => {
 
 	describe('GET ' + baseUri + '/:customerId', () => {
 		it('should get a customer by id', done => {
-			console.log(
-				`testData.existingCustomer._id:`,
-				testData.existingCustomer._id
-			);
 			request(app)
 				.get(`${baseUri}/${testData.existingCustomer._id}`)
 				.end((err, res) => {
@@ -72,6 +88,25 @@ describe('Integration Test: Customer Controller', () => {
 					expect(res.body.firstName).to.equal(
 						testData.existingCustomer.firstName
 					);
+
+					done();
+				});
+		});
+	});
+
+	describe('PUT ' + baseUri + '/:customerId', function() {
+		it('should be able to update existing customer', function(done) {
+			testData.existingCustomer._id = testData.existingCustomer._id;
+			let newCustomer = testData.existingCustomer;
+			newCustomer.firstName = 'updated first name';
+			request(app)
+				.put(baseUri + '/' + testData.existingCustomer._id)
+				.send(newCustomer)
+				.end(function(err, res) {
+					expect(res.status).to.equal(200);
+					expect(res.body).to.not.equal(undefined);
+					expect(res.body.firstName).to.equal(newCustomer.firstName);
+					expect(res.body.firstName).to.equal(newCustomer.firstName);
 
 					done();
 				});

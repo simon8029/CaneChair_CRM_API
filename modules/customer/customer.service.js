@@ -4,7 +4,8 @@
 	module.exports = {
 		createCustomer: createCustomer,
 		getAllCustomers: getAllCustomers,
-		getCustomerById: getCustomerById
+		getCustomerById: getCustomerById,
+		updateCustomer: updateCustomer
 	};
 
 	var CustomerModel = require('./customer.module')().CustomerModel;
@@ -19,5 +20,11 @@
 
 	function getCustomerById(customerId) {
 		return CustomerModel.findById(customerId).exec();
+	}
+
+	function updateCustomer(customerId, newCustomer) {
+		return CustomerModel.findByIdAndUpdate(customerId, newCustomer, {
+			new: true
+		}).exec();
 	}
 })();

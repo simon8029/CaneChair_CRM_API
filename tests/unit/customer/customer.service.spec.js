@@ -119,4 +119,24 @@ describe('CustomerService', () => {
 			expect(error).to.deep.equal(expectedError);
 		});
 	});
+
+	describe('Update Customer', () => {
+		var newCustomer, expectedUpdatedCustomer, expectedError;
+
+		it('should successfully update customer', () => {
+			expectedUpdatedCustomer = Fixtures.modifiedCustomer;
+			newCustomer = CustomerFixture.createdCustomer;
+
+			CustomerModelMock.expects('findByIdAndUpdate')
+				.withArgs(newCustomer._id, newCustomer, { new: true })
+				.chain('exec')
+				.resolves(expectedUpdatedCustomer);
+
+			CustomerService.updateCustomer(newCustomer._id, newCustomer).then(
+				data => {
+					expect(data).to.deep.equal(expectedUpdatedCustomer);
+				}
+			);
+		});
+	});
 });

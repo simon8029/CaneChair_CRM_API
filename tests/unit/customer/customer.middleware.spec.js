@@ -167,4 +167,59 @@ describe('Customer Middleware', () => {
 			});
 		});
 	});
+
+	describe('updateCustomer', function() {
+		var updateCustomer,
+			updateCustomerPromise,
+			expectedUpdatedCustomer,
+			expectedError;
+
+		beforeEach(function() {
+			updateCustomer = sinon.stub(CustomerService, 'updateCustomer');
+
+			req.body = CustomerFixture.updatedCustomer;
+			req.params.customerId = req.body._id;
+		});
+
+		afterEach(function() {
+			updateCustomer.restore();
+		});
+
+		it('should successfully modify the customer details', function() {
+			expectedUpdatedCustomer = CustomerFixture.updatedCustomer;
+
+			updateCustomerPromise = Promise.resolve(expectedUpdatedCustomer);
+			updateCustomer
+				.withArgs(req.params.customerId, req.body)
+				.returns(updateCustomerPromise);
+
+			CustomerMiddleware.updateCustomer(req, res, next);
+
+			sinon.assert.callCount(updateCustomer, 1);
+
+			return updateCustomerPromise.then(function() {
+				expect(req.response).to.be.a('object');
+				expect(req.response).to.deep.equal(expectedUpdatedCustomer);
+				sinon.assert.callCount(next, 1);
+			});
+		});
+
+		it('should throw error while modifying customer details', function() {
+			expectedError = ErrorFixture.unknownError;
+
+			updateCustomerPromise = Promise.reject(expectedError);
+			updateCustomer
+				.withArgs(req.params.customerId, req.body)
+				.returns(updateCustomerPromise);
+
+			CustomerMiddleware.updateCustomer(req, res, next);
+
+			sinon.assert.callCount(updateCustomer, 1);
+
+			return updateCustomerPromise.catch(function(error) {
+				expect(error).to.be.a('object');
+				expect(error).to.deep.equal(expectedError);
+			});
+		});
+	});
 });
