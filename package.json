@@ -21,6 +21,7 @@
 		"chai-http": "^4.2.0",
 		"mocha": "^5.2.0",
 		"node-mocks-http": "^1.7.3",
-		"sinon": "^6.3.5"
+		"sinon": "^6.3.5",
+		"sinon-mongoose": "^2.2.1"
 	}
 }

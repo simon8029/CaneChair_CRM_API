@@ -69,4 +69,49 @@ describe('Customer Middleware', () => {
 			});
 		});
 	});
+
+	describe('Get all customers', () => {
+		var getAllCustomers,
+			getAllCustomersPromise,
+			expectedCustomers,
+			expectedError;
+
+		beforeEach(() => {
+			getAllCustomers = sinon.stub(CustomerService, 'getAllCustomers');
+			req.body = {};
+		});
+		afterEach(() => {
+			getAllCustomers.restore();
+		});
+
+		it('should successfully get all customers', () => {
+			expectedCustomers = CustomerFixture.customers;
+			getAllCustomersPromise = Promise.resolve(expectedCustomers);
+			getAllCustomers.returns(getAllCustomersPromise);
+
+			CustomerMiddleware.getAllCustomers(req, res, next);
+			sinon.assert.callCount(getAllCustomers, 1);
+
+			getAllCustomersPromise.then(() => {
+				expect(req.response).to.be.a('array');
+				expect(req.response.length).to.equal(expectedCustomers.length);
+				expect(req.response).to.deep.equal(expectedCustomers);
+				sinon.assert.callCount(next, 1);
+			});
+		});
+
+		it('should throw error while getting all customers', () => {
+			expectedError = ErrorFixture.unknownError;
+			getAllCustomersPromise = Promise.reject(expectedError);
+			getAllCustomers.returns(getAllCustomersPromise);
+			CustomerMiddleware.getAllCustomers(req, res, next);
+
+			sinon.assert.callCount(getAllCustomers, 1);
+
+			getAllCustomersPromise.catch(error => {
+				expect(error).to.be.a('object');
+				expect(error).to.deep.equal(expectedError);
+			});
+		});
+	});
 });
