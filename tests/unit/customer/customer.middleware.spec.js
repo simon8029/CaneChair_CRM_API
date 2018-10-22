@@ -168,7 +168,7 @@ describe('Customer Middleware', () => {
 		});
 	});
 
-	describe('updateCustomer', function() {
+	describe('Update Customer', function() {
 		var updateCustomer,
 			updateCustomerPromise,
 			expectedUpdatedCustomer,
@@ -217,6 +217,58 @@ describe('Customer Middleware', () => {
 			sinon.assert.callCount(updateCustomer, 1);
 
 			return updateCustomerPromise.catch(function(error) {
+				expect(error).to.be.a('object');
+				expect(error).to.deep.equal(expectedError);
+			});
+		});
+	});
+
+	describe('Delete Customer', function() {
+		var deleteCustomer,
+			deleteCustomerPromise,
+			expectedCustomer,
+			expectedError;
+
+		beforeEach(function() {
+			deleteCustomer = sinon.stub(CustomerService, 'deleteCustomer');
+		});
+
+		afterEach(function() {
+			deleteCustomer.restore();
+		});
+
+		it('should successfully remove the customer', function() {
+			expectedCustomer = CustomerFixture.createdCustomer;
+
+			deleteCustomerPromise = Promise.resolve(expectedCustomer);
+			deleteCustomer
+				.withArgs(req.params.customerId)
+				.returns(deleteCustomerPromise);
+
+			CustomerMiddleware.deleteCustomer(req, res, next);
+
+			sinon.assert.callCount(deleteCustomer, 1);
+
+			return deleteCustomerPromise.then(function() {
+				expect(req.response).to.be.a('object');
+				expect(req.response).to.deep.equal(expectedCustomer);
+				sinon.assert.callCount(next, 1);
+			});
+		});
+
+		it('should throw error while removing customer', function() {
+			expectedError = ErrorFixture.unknownError;
+
+			deleteCustomerPromise = Promise.reject(expectedError);
+			deleteCustomer
+				.withArgs(req.params.customerId)
+				.returns(deleteCustomerPromise);
+
+			CustomerMiddleware.deleteCustomer(req, res, next);
+
+			sinon.assert.callCount(deleteCustomer, 1);
+
+			return deleteCustomerPromise.catch(function(error) {
 				expect(error).to.be.a('object');
 				expect(error).to.deep.equal(expectedError);
 			});

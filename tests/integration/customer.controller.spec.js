@@ -23,8 +23,7 @@ var CustomerFixture = Fixtures.CustomerFixture;
 var baseUri = '/customers';
 
 var testData = {
-	existingCustomer: {},
-	updatedCustomer: CustomerFixture.updatedCustomer
+	existingCustomer: {}
 };
 
 // before(function(done) {
@@ -107,6 +106,22 @@ describe('Integration Test: Customer Controller', () => {
 					expect(res.body).to.not.equal(undefined);
 					expect(res.body.firstName).to.equal(newCustomer.firstName);
 					expect(res.body.firstName).to.equal(newCustomer.firstName);
+
+					done();
+				});
+		});
+	});
+
+	describe('DELETE ' + baseUri + '/:customerId', function() {
+		it('should be able to delete an existing customer', function(done) {
+			request(app)
+				.delete(baseUri + '/' + testData.existingCustomer._id)
+				.end(function(err, res) {
+					expect(res.status).to.equal(200);
+					expect(res.body.firstName).to.not.equal(undefined);
+					expect(res.body.firstName).to.equal(
+						testData.existingCustomer.firstName
+					);
 
 					done();
 				});

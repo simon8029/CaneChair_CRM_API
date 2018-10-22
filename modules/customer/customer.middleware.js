@@ -5,7 +5,8 @@
 		addCustomer: addCustomer,
 		getAllCustomers: getAllCustomers,
 		getCustomerById: getCustomerById,
-		updateCustomer: updateCustomer
+		updateCustomer: updateCustomer,
+		deleteCustomer: deleteCustomer
 	};
 
 	var CustomerService = require('./customer.module')().CustomerService;
@@ -66,6 +67,21 @@
 		}
 
 		function failure(err) {
+			next(err);
+		}
+	}
+
+	function deleteCustomer(req, res, next) {
+		CustomerService.deleteCustomer(req.params.customerId)
+			.then(success)
+			.catch(error);
+
+		function success(data) {
+			req.response = data;
+			next();
+		}
+
+		function error(err) {
 			next(err);
 		}
 	}
