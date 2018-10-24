@@ -26,17 +26,17 @@ var testData = {
 	existingCustomer: {}
 };
 
-// before(function(done) {
-// 	mockgoose.prepareStorage().then(function() {
-// 		mongoose.connect(
-// 			mockMongoDBURL,
-// 			{},
-// 			function(err) {
-// 				done(err);
-// 			}
-// 		);
-// 	});
-// });
+before(function(done) {
+	mockgoose.prepareStorage().then(function() {
+		mongoose.connect(
+			mockMongoDBURL,
+			{},
+			function(err) {
+				done(err);
+			}
+		);
+	});
+});
 
 describe('Integration Test: Customer Controller', () => {
 	// before(() => {
