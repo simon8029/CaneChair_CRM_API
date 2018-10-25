@@ -1,5 +1,5 @@
 {
-	"name": "canechair-crm",
+	"name": "canechair-framework",
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
@@ -9,7 +9,7 @@
 	"dependencies": {
 		"bluebird": "^3.5.2",
 		"cookie-parser": "~1.4.3",
-		"debug": "~2.6.9",
+		"debug": "^4.1.0",
 		"express": "~4.16.0",
 		"http-errors": "~1.6.2",
 		"mongodb": "^3.1.7",
@@ -17,12 +17,19 @@
 		"morgan": "~1.9.0"
 	},
 	"devDependencies": {
+		"babel-core": "^6.26.3",
+		"babel-loader": "^8.0.4",
+		"babel-preset-env": "^1.7.0",
+		"babel-preset-stage-2": "^6.24.1",
 		"chai": "^4.2.0",
 		"chai-http": "^4.2.0",
 		"mocha": "^5.2.0",
 		"mockgoose-fix": "^7.3.6",
 		"node-mocks-http": "^1.7.3",
 		"sinon": "^6.3.5",
-		"sinon-mongoose": "^2.2.1"
+		"sinon-mongoose": "^2.2.1",
+		"webpack": "^4.23.0",
+		"webpack-cli": "^3.1.2",
+		"webpack-node-externals": "^1.7.2"
 	}
 }
