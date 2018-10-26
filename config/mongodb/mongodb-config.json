@@ -1,6 +1,6 @@
 {
 	"mongodb": {
-		"server": "localhost:32769",
+		"server": "localhost:27017",
 		"database": "canechair_crm_db_dev",
 		"user": null,
 		"password": null
