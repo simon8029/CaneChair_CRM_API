@@ -10,7 +10,7 @@ const signin = (req, res) => {
 		},
 		(err, user) => {
 			if (err || !user)
-				return res.status('401').json({
+				return res.status('404').json({
 					error: 'User not found'
 				});
 
@@ -51,7 +51,7 @@ const requireSignin = expressJwt({
 	userProperty: 'auth'
 });
 
-const hasAuthorization = (req, res) => {
+const hasAuthorization = (req, res, next) => {
 	const authorized =
 		req.profile && req.auth && req.profile._id == req.auth._id;
 	if (!authorized) {

@@ -17,7 +17,6 @@ const create = (req, res, next) => {
 };
 
 const list = (req, res) => {
-	console.log(`req:`, req);
 	User.find((err, users) => {
 		if (err) {
 			return res.status(400).json({
