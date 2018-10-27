@@ -1,3 +1,4 @@
+import path from 'path';
 import express from 'express';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
@@ -7,12 +8,17 @@ import helmet from 'helmet';
 import Template from './../template';
 import userRoutes from './routes/user.routes';
 import authRoutes from './routes/auth.routes';
+import devBundle from './devBundle';
 
 const app = express();
+devBundle.compile(app);
 
 app.get('/', (req, res) => {
 	res.status(200).send(Template());
 });
+
+const CURRENT_WORKING_DIR = process.cwd();
+app.use('/dist', express.static(path.join(CURRENT_WORKING_DIR, 'dist')));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
