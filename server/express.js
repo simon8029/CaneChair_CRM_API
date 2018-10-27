@@ -16,12 +16,17 @@ app.get('/', (req, res) => {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookieParser);
+app.use(cookieParser());
 app.use(compress());
 app.use(helmet());
 app.use(cors());
 
 app.use('/', userRoutes);
 app.use('/', authRoutes);
+app.use((err, req, res, next) => {
+	if (err.name === 'UnauthorizedError') {
+		res.status(401).json({ error: err.name + ': ' + err.message });
+	}
+});
 
 export default app;
