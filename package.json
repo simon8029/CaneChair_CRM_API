@@ -1,47 +1,21 @@
 {
-	"name": "canechair-framework",
-	"version": "0.1.0",
-	"private": true,
+	"name": "canechair-cli",
+	"version": "1.0.0",
+	"main": "index.js",
+	"repository": "https://github.com/simon8029/canechair-cli.git",
+	"author": "simon8029 <simon.lau@msn.com>",
+	"license": "MIT",
 	"scripts": {
-		"dev": "nodemon",
-		"build": "webpack --config webpack.config.client.production.js && webpack --mode=production --config webpack.config.server.js",
-		"start": "NODE_ENV=production node ./dist/server.generated.js",
-		"test": "mocha --recursive ./tests --watch ./modules"
-	},
-	"dependencies": {
-		"body-parser": "^1.18.3",
-		"compression": "^1.7.3",
-		"cookie-parser": "^1.4.3",
-		"cors": "^2.8.4",
-		"express": "^4.16.3",
-		"express-jwt": "^5.3.1",
-		"helmet": "^3.14.0",
-		"jsonwebtoken": "^8.3.0",
-		"lodash": "^4.17.10",
-		"material-ui": "^1.0.0-beta.43",
-		"material-ui-icons": "^1.0.0-beta.36",
-		"mongodb": "^3.0.7",
-		"mongoose": "^5.3.6",
-		"react": "^16.3.2",
-		"react-dom": "^16.3.2",
-		"react-hot-loader": "^4.3.11",
-		"react-redux": "^5.1.0",
-		"react-router": "^4.2.0",
-		"react-router-dom": "^4.2.2",
-		"redux": "^4.0.1"
+		"start": "ts-node src/index.ts",
+		"start:watch": "nodemon --watch src --exec ts-node src/index.ts",
+		"build": "tsc"
 	},
 	"devDependencies": {
-		"babel-core": "^6.26.2",
-		"babel-loader": "^7.1.4",
-		"babel-preset-env": "^1.6.1",
-		"babel-preset-react": "^6.24.1",
-		"babel-preset-stage-2": "^6.24.1",
-		"file-loader": "^1.1.11",
-		"nodemon": "^1.17.3",
-		"webpack": "^4.6.0",
-		"webpack-cli": "^3.1.2",
-		"webpack-dev-middleware": "^3.4.0",
-		"webpack-hot-middleware": "^2.24.3",
-		"webpack-node-externals": "^1.7.2"
+		"@types/inquirer": "^7.3.1",
+		"@types/node": "^14.11.10",
+		"chalk": "^4.1.0"
+	},
+	"dependencies": {
+		"inquirer": "^7.3.3"
 	}
 }
